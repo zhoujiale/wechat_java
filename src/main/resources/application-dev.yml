@@ -44,3 +44,15 @@ logging:
     com.zjl.wechat_java: debug
     org.hibernate: error
   config: classpath:logback-spring.xml
+#微信配置
+wx:
+  #公众号
+  official-account:
+    appid: wx59242c4738b23671
+    appsecret: 7cfd897d7377900f2de155fa90f815f6
+    token: cpid5czC0XXJ0odT5Qygz
+    encodingaeskey: zhFLUGiqHEJl6dAijGlXx7L8eA5ICUTkkPSyB4T1viE
+  #小程序
+  mini-program:
+    appid:
+    appsecret:
