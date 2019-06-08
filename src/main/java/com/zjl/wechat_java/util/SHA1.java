@@ -1,4 +1,4 @@
-package com.zjl.wechat_java.utils;
+package com.zjl.wechat_java.util;
 
 import com.zjl.wechat_java.error.AesErrorEnum;
 import com.zjl.wechat_java.exception.AesException;

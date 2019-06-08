@@ -1,9 +1,9 @@
 package com.zjl.wechat_java.controller;
 
 import com.zjl.wechat_java.config.WxOfficialsAccountConfiguration;
-import com.zjl.wechat_java.error.WeChatErrorEnum;
-import com.zjl.wechat_java.exception.WeChatException;
-import com.zjl.wechat_java.utils.SHA1;
+import com.zjl.wechat_java.error.WeChatOaErrorEnum;
+import com.zjl.wechat_java.exception.WeChatOaException;
+import com.zjl.wechat_java.util.SHA1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +53,7 @@ public class WxServiceConfigController {
             if (sha1Result.equals(signature)) {
                 response.getWriter().write(echostr);
             }else{
-                throw new WeChatException(WeChatErrorEnum.NOT_FROM_WECHAT);
+                throw new WeChatOaException(WeChatOaErrorEnum.NOT_FROM_WECHAT);
             }
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -1,4 +1,4 @@
-package com.zjl.wechat_java.utils;
+package com.zjl.wechat_java.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 public class WebResponse {
 
     /**状态码*/
-    private String code;
+    private Integer code;
     /**信息*/
     private String msg;
     /**数据*/
     private Object data;
 
     public static WebResponse success(Object data){
-        return new WebResponse("200","success",data);
+        return new WebResponse(200,"success",data);
     }
 
-    public static WebResponse fail(String code,String msg){
+    public static WebResponse fail(Integer code,String msg){
         return new WebResponse(code,msg,null);
     }
 }

@@ -10,7 +10,7 @@ import lombok.Getter;
  * @datetime: 2019/6/1 21:45
  */
 @Getter
-public class AesException extends Exception{
+public class AesException extends RuntimeException{
     private AesErrorEnum aesErrorEnum;
 
     public AesException(AesErrorEnum aesErrorEnum){

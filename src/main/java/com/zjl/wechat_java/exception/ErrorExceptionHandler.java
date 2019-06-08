@@ -1,6 +1,6 @@
 package com.zjl.wechat_java.exception;
 
-import com.zjl.wechat_java.utils.WebResponse;
+import com.zjl.wechat_java.util.WebResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,14 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ErrorExceptionHandler {
 
     @ExceptionHandler(AesException.class)
-    public WebResponse AesExceptionHandler(AesException e){
+    public WebResponse aesExceptionHandler(AesException e){
         return WebResponse.fail(e.getAesErrorEnum().getErrorCode(),
                 e.getAesErrorEnum().getErrorMsg());
     }
 
-    @ExceptionHandler(WeChatException.class)
-    public WebResponse WeChatExceptionHandler(WeChatException e){
-        return WebResponse.fail(e.getWeChatErrorEnum().getErrorCode(),
-                e.getWeChatErrorEnum().getErrorMsg());
+    @ExceptionHandler(WeChatOaException.class)
+    public WebResponse weChatExceptionHandler(WeChatOaException e){
+        return WebResponse.fail(e.getWeChatOaErrorEnum().getErrorCode(),
+                e.getWeChatOaErrorEnum().getErrorMsg());
+    }
+
+    @ExceptionHandler(WxErrorException.class)
+    public WebResponse wxExceptionHandler(WxErrorException e){
+        return WebResponse.fail(e.getErrCode(),e.getErrMsg());
     }
 }
