@@ -66,6 +66,7 @@ wx:
     appsecret: 7cfd897d7377900f2de155fa90f815f6
     token: cpid5czC0XXJ0odT5Qygz
     encodingaeskey: zhFLUGiqHEJl6dAijGlXx7L8eA5ICUTkkPSyB4T1viE
+    redirectUrl: https://localhost:8081/wechat/oa/authCallback
   #小程序
   mini-program:
     appid: wx7133b99694e2495f

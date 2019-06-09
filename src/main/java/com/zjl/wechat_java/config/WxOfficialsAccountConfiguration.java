@@ -22,4 +22,6 @@ public class WxOfficialsAccountConfiguration {
     private String appsecret;
     /**微信公众号token*/
     private String token;
+    /**微信授权回调*/
+    private String redirectUrl;
 }

@@ -31,4 +31,10 @@ public class ErrorExceptionHandler {
     public WebResponse wxExceptionHandler(WxErrorException e){
         return WebResponse.fail(e.getErrCode(),e.getErrMsg());
     }
+
+    @ExceptionHandler(HttpException.class)
+    public WebResponse httpExceptionHandler(HttpException e){
+        return WebResponse.fail(e.getHttpErrorEnum().getErrorCode(),
+                e.getHttpErrorEnum().getErrorMsg());
+    }
 }
