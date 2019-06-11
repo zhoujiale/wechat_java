@@ -3,7 +3,12 @@ package com.zjl.wechat_java.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.zjl.wechat_java.config.WxOaUrlConfig;
 import com.zjl.wechat_java.config.WxOfficialsAccountConfiguration;
+import com.zjl.wechat_java.domain.vo.OaUserVO;
+import com.zjl.wechat_java.entity.OaUser;
+import com.zjl.wechat_java.error.WeChatOaErrorEnum;
+import com.zjl.wechat_java.exception.WeChatOaException;
 import com.zjl.wechat_java.exception.WxErrorException;
+import com.zjl.wechat_java.mapper.OaUserRepository;
 import com.zjl.wechat_java.service.WxOfficialAccountService;
 import com.zjl.wechat_java.util.HttpUtil;
 import com.zjl.wechat_java.util.RedisUtil;
@@ -11,8 +16,10 @@ import com.zjl.wechat_java.util.WebResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * @className: WxOfficialAccountServiceImpl
@@ -29,6 +36,8 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
     private HttpUtil httpUtil;
     @Autowired
     private WxOfficialsAccountConfiguration wxOfficialsAccountConfiguration;
+    @Autowired
+    private OaUserRepository oaUserRepository;
 
     /**
      * @description: 获取公众号的accessToken
@@ -93,6 +102,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
      * @date 2019/6/9
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public WebResponse loginInfo(JSONObject tokenObject) {
         //网页授权token存入redis
         redisUtil.set(tokenObject.getString("openid"),tokenObject.getString("access_token"), (long) 7200);
@@ -102,6 +112,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
            .append("&").append("openid=").append(tokenObject.getString("openid"))
            .append("&").append("lang=zh_CN");
         String url = sb.toString();
+        OaUserVO oaUserVO = null;
         try {
             //获取用户信息
             JSONObject jsonResult = httpUtil.doGetJson(url);
@@ -111,11 +122,31 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
                 throw new WxErrorException(jsonResult.getInteger("errcode"),
                         jsonResult.getString("errmsg"));
             }else{
-
+                OaUser oaUser = OaUser.builder()
+                        .avatar(jsonResult.getString("avatar"))
+                        .city(jsonResult.getString("city"))
+                        .country(jsonResult.getString("country"))
+                        .createTime(LocalDateTime.now())
+                        .deleted(false)
+                        .nickName(jsonResult.getString("nickname"))
+                        .openid(jsonResult.getString("openid"))
+                        .province(jsonResult.getString("province"))
+                        .refreshTime(LocalDateTime.now())
+                        .refreshToken(tokenObject.getString("refresh_token"))
+                        .sex(jsonResult.getShort("sex"))
+                        .unionid(jsonResult.containsKey("unionid")?jsonResult.getString("unionid"):null)
+                        .updateTime(LocalDateTime.now())
+                        .build();
+                oaUserRepository.saveAndFlush(oaUser);
+                oaUserVO.setAvatar(jsonResult.getString("avatar"));
+                oaUserVO.setNickname(jsonResult.getString("nickname"));
+                oaUserVO.setOpenid(jsonResult.getString("openid"));
+                oaUserVO.setUserId(oaUser.getUserId());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("登录失败");
+            throw new WeChatOaException(WeChatOaErrorEnum.AUTH_LOGIN_ERROR);
         }
-        return null;
+        return WebResponse.success(oaUserVO);
     }
 }
