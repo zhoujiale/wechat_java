@@ -61,7 +61,8 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
                 return jsonObject.get("access_token").toString();
             }else {
                 log.error(jsonObject.toJSONString());
-                throw new WxErrorException(jsonObject.getInteger("errcode"),jsonObject.get("errmsg").toString());
+                throw new WxErrorException(jsonObject.getInteger("errcode"),
+                        jsonObject.get("errmsg").toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +106,8 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
     @Transactional(rollbackFor = Exception.class)
     public WebResponse loginInfo(JSONObject tokenObject) {
         //网页授权token存入redis
-        redisUtil.set(tokenObject.getString("openid"),tokenObject.getString("access_token"), (long) 7200);
+        redisUtil.set(tokenObject.getString("openid"),tokenObject.getString("access_token"),
+                (long) 7200);
         //拼装请求url
         StringBuilder sb = new StringBuilder(WxOaUrlConfig.API_USER_INFO);
         sb.append("access_token=").append(tokenObject.getString("access_token"))

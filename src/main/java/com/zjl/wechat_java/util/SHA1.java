@@ -48,7 +48,7 @@ public class SHA1 {
             return hexstr.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new AesException(AesErrorEnum.ComputeSignatureError);
+            throw new AesException(AesErrorEnum.COMPUTE_SIGNATURE_ERROR);
         }
     }
 }
