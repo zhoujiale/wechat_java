@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -52,7 +53,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
         StringBuilder sb = new StringBuilder(WxOaUrlConfig.API_ACCESS_TOKEN);
         sb.append("&")
           .append("appid=").append(wxOfficialsAccountConfiguration.getAppid())
-          .append("&").append("appsecret=").append(wxOfficialsAccountConfiguration.getAppsecret());
+          .append("&").append("secret=").append(wxOfficialsAccountConfiguration.getAppsecret());
         String url = sb.toString();
         //请求微信api
         try {
@@ -82,7 +83,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
         //拼装url
         StringBuilder sb = new StringBuilder(WxOaUrlConfig.API_WEB_ACCESS_TOKEN);
         sb.append("appid=").append(wxOfficialsAccountConfiguration.getAppid())
-           .append("&").append("appsecret=").append(wxOfficialsAccountConfiguration.getAppsecret())
+           .append("&").append("secret=").append(wxOfficialsAccountConfiguration.getAppsecret())
            .append("&").append("code=").append(code)
            .append("&grant_type=authorization_code");
         String url = sb.toString();
@@ -114,7 +115,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
            .append("&").append("openid=").append(tokenObject.getString("openid"))
            .append("&").append("lang=zh_CN");
         String url = sb.toString();
-        OaUserVO oaUserVO = null;
+        OaUserVO oaUserVO = new OaUserVO();
         try {
             //获取用户信息
             JSONObject jsonResult = httpUtil.doGetJson(url);
@@ -125,7 +126,7 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
                         jsonResult.getString("errmsg"));
             }else{
                 OaUser oaUser = OaUser.builder()
-                        .avatar(jsonResult.getString("avatar"))
+                        .avatar(jsonResult.getString("headimgurl"))
                         .city(jsonResult.getString("city"))
                         .country(jsonResult.getString("country"))
                         .createTime(LocalDateTime.now())
@@ -137,16 +138,18 @@ public class WxOfficialAccountServiceImpl implements WxOfficialAccountService{
                         .refreshToken(tokenObject.getString("refresh_token"))
                         .sex(jsonResult.getShort("sex"))
                         .unionid(jsonResult.containsKey("unionid")?jsonResult.getString("unionid"):null)
+                        .privilege(jsonResult.getString("privilege"))
                         .updateTime(LocalDateTime.now())
                         .build();
                 oaUserRepository.saveAndFlush(oaUser);
-                oaUserVO.setAvatar(jsonResult.getString("avatar"));
+                oaUserVO.setAvatar(jsonResult.getString("headimgurl"));
                 oaUserVO.setNickname(jsonResult.getString("nickname"));
                 oaUserVO.setOpenid(jsonResult.getString("openid"));
                 oaUserVO.setUserId(oaUser.getUserId());
             }
         } catch (Exception e) {
             log.error("登录失败");
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new WeChatOaException(WeChatOaErrorEnum.AUTH_LOGIN_ERROR);
         }
         return WebResponse.success(oaUserVO);

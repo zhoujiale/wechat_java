@@ -1,5 +1,6 @@
 package com.zjl.wechat_java.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  * @description: 微信小程序配置参数
  * @datetime: 2019/6/7 16:23
  */
+@Data
 @Component
 @ConfigurationProperties(prefix = "wx.mini-program")
 public class WxMiniProgramConfiguration {

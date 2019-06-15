@@ -20,7 +20,7 @@ public class JobScheduler {
     private JobSchedulerService jobSchedulerService;
 
     /**公众号access_token刷新时间*/
-    private final Integer OA_ACCESS_TOKEN = 1000 * 7200;
+    private static final long OA_ACCESS_TOKEN = 7200 * 1000;
 
     /**
      * @description: 定时刷新公众号access_token

@@ -1,8 +1,6 @@
 package com.zjl.wechat_java.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @className: WebResponse
@@ -11,8 +9,6 @@ import lombok.NoArgsConstructor;
  * @datetime: 2019/6/1 22:27
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class WebResponse {
 
     /**状态码*/
@@ -28,5 +24,14 @@ public class WebResponse {
 
     public static WebResponse fail(Integer code,String msg){
         return new WebResponse(code,msg,null);
+    }
+
+    public WebResponse(Integer code,String msg,Object data){
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+    public WebResponse(){
+
     }
 }

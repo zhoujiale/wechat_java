@@ -2,6 +2,8 @@ package com.zjl.wechat_java.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -53,13 +55,18 @@ public class OaUser {
     @Column(name = "refresh_time",nullable = false)
     private LocalDateTime refreshTime;
     /**创建时间*/
+    @CreatedDate
     @Column(name = "create_time",nullable = false)
     private LocalDateTime createTime;
     /**更新时间*/
+    @LastModifiedDate
     @Column(name = "update_time",nullable = false)
     private LocalDateTime updateTime;
     /**逻辑删除*/
     @Column(name = "deleted",nullable = false)
     private Boolean deleted;
+    /**特权*/
+    @Column(name = "privilege",nullable = false)
+    private String privilege;
 
 }

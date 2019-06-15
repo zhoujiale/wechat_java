@@ -1,7 +1,7 @@
 package com.zjl.wechat_java.config;
 
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @return:
  * @date: 2019/6/1
  */
-@Getter
+@Data
 @Component
 @ConfigurationProperties(prefix = "wx.official-account")
 public class WxOfficialsAccountConfiguration {

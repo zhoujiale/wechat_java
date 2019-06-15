@@ -2,6 +2,10 @@ package com.zjl.wechat_java.error;
 
 import lombok.Getter;
 
+/**
+ * @author user
+ */
+
 @Getter
 public enum AesErrorEnum {
     VALIDATE_SIGNATURE_ERROR(4001,"签名验证错误"),

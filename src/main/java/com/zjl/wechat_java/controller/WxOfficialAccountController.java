@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -47,7 +48,7 @@ public class WxOfficialAccountController {
      * @date 2019/6/8
      */
     @GetMapping(value = "/preAuth")
-    public void preAuth()  {
+    public void preAuth(HttpServletResponse response)  {
         //拼接请求地址
         StringBuilder sb = new StringBuilder(WxOaUrlConfig.API_PRE_AUTH);
         sb.append("appid=").append(wxOfficialsAccountConfiguration.getAppid())
@@ -60,7 +61,8 @@ public class WxOfficialAccountController {
            .append("#wechat_redirect");
         String url = sb.toString();
         try {
-            httpUtil.doGetJson(url);
+            //httpUtil.doGetJson(url);
+            response.sendRedirect(url);
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new HttpException(HttpErrorEnum.REQUEST_ERROR);
@@ -79,13 +81,11 @@ public class WxOfficialAccountController {
         String code = request.getParameter("code");
         //获取网页授权的accessToken
         JSONObject tokenObject = wxOfficialAccountService.getWebAccessToken(code);
-        WebResponse webResponse = null;
-        if(tokenObject.containsKey("access_token")){
-            webResponse = wxOfficialAccountService.loginInfo(tokenObject);
-        }else{
+        if(!tokenObject.containsKey("access_token")){
             log.error(tokenObject.getString("errmsg"));
             throw new WxErrorException(tokenObject.getInteger("errcode"),tokenObject.get("errMsg").toString());
         }
+        WebResponse webResponse = wxOfficialAccountService.loginInfo(tokenObject);
         return webResponse;
     }
 }
