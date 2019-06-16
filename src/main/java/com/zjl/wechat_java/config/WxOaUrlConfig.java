@@ -15,4 +15,8 @@ public class WxOaUrlConfig {
     public static final String API_WEB_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?";
     /**公众号网页登录获取用户信息*/
     public static final String API_USER_INFO = "https://api.weixin.qq.com/sns/userinfo?";
+    /**公众号生成二维码*/
+    public static final String API_CREATE_QR_CODE = "https://api.weixin.qq.com/cgi-bin/qrcode/create?";
+    /**通过ticket展示二维码*/
+    public static final String API_SHOW_QR_CODE ="https://mp.weixin.qq.com/cgi-bin/showqrcode?";
 }

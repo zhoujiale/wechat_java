@@ -25,7 +25,7 @@ public class WebLogAspect {
     /**请求开始时间*/
     ThreadLocal<LocalDateTime> startTime = new ThreadLocal<>();
 
-    @Pointcut("execution(public * com.zjl.wechat_java.controller.*.*())")
+    @Pointcut("execution(public * com.zjl.wechat_java.controller.*.*(..))")
     public void webLog(){
 
     }

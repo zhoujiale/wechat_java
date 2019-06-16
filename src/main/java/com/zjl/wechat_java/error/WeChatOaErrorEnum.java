@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum WeChatOaErrorEnum {
     NOT_FROM_WECHAT(4020,"非微信的非法请求"),
     GET_ACCESS_TOKEN_ERROR(4021,"获取accessToken异常"),
-    AUTH_LOGIN_ERROR(4022,"公众号授权登陆失败");
+    AUTH_LOGIN_ERROR(4022,"公众号授权登陆失败"),
+    QR_CODE_TICKET_ERROR(4023,"公众号二维码ticket异常");
     private Integer errorCode;
     private String errorMsg;
 
