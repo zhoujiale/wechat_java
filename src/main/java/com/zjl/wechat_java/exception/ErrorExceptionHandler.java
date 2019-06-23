@@ -37,4 +37,9 @@ public class ErrorExceptionHandler {
         return WebResponse.fail(e.getHttpErrorEnum().getErrorCode(),
                 e.getHttpErrorEnum().getErrorMsg());
     }
+
+    @ExceptionHandler(WeChatMiniException.class)
+    public WebResponse WeChatMiniExceptionHandler(WeChatMiniException e){
+        return WebResponse.fail(e.getErrCode(),e.getErrMsg());
+    }
 }

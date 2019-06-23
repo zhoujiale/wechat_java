@@ -7,5 +7,6 @@ package com.zjl.wechat_java.config;
  * @datetime: 2019/6/8 10:35
  */
 public class CacheParam {
-    public static final String OA_ACCESS_TOKEN = "oa_access_token";
+    public static final String OA_ACCESS_TOKEN = "oa_access_token:";
+    public static final String CODE_SESSION = "code_session:";
 }
