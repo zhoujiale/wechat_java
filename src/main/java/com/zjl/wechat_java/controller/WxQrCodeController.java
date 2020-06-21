@@ -1,10 +1,10 @@
 package com.zjl.wechat_java.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zjl.wechat_java.error.WeChatOaErrorEnum;
-import com.zjl.wechat_java.exception.WeChatOaException;
+import com.zjl.wechat_java.exception.SelfDefinedException;
 import com.zjl.wechat_java.service.WxQrCodeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,11 +41,19 @@ public class WxQrCodeController {
                                          @RequestParam(value = "sceneStr",required = false) String sceneStr,
                                          @RequestParam(value = "state",required = false)Integer state,
                                          HttpServletResponse response){
-        JSONObject ticketJson = wxQrCodeService.QrCodeOfficialTicket(sceneId, sceneStr, state);
-        if(null == ticketJson){
-            log.error("获取公众号二维码ticket失败");
-            throw new WeChatOaException(WeChatOaErrorEnum.QR_CODE_TICKET_ERROR);
+        if (null != sceneId && (sceneId < 0 || sceneId > 100000)){
+            log.warn("场景值id不合法");
+            throw new SelfDefinedException("场景值id不合法");
         }
+        if (StringUtils.isNotBlank(sceneStr) && sceneStr.length() > 64){
+            log.warn("场景值字符串不合法");
+            throw new SelfDefinedException("场景值字符串不合法");
+        }
+        if (0 != state && 1 != state){
+            log.warn("类型不合法");
+            throw new SelfDefinedException("类型不合法");
+        }
+        JSONObject ticketJson = wxQrCodeService.QrCodeOfficialTicket(sceneId, sceneStr, state);
         wxQrCodeService.generateQrCodeOfficial(ticketJson,response);
     }
 }

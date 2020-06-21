@@ -2,6 +2,7 @@ package com.zjl.wechat_java.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -33,6 +34,7 @@ import java.nio.charset.Charset;
  * @datetime: 2019/6/7 23:45
  */
 @Component
+@Slf4j
 public class HttpUtil {
 
     /**
@@ -94,7 +96,7 @@ public class HttpUtil {
             HttpResponse httpResponse = httpClient.execute(httpPost);
             if(httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
                 String resultToString = EntityUtils.toString(httpResponse.getEntity());
-                System.out.println(resultToString);
+                log.debug(resultToString);
                 return JSON.parseObject(resultToString);
             }
             return (JSONObject) httpResponse;
