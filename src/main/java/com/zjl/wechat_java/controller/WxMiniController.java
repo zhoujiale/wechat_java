@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
-@RequestMapping("mini")
+@RequestMapping("/mini")
 public class WxMiniController {
 
     @Autowired

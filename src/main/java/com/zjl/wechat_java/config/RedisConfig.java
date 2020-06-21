@@ -11,8 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.lang.reflect.Method;
-
 /**
  * @className: RedisConfig
  * @author: zhou
@@ -24,17 +22,14 @@ import java.lang.reflect.Method;
 public class RedisConfig {
     @Bean
     public KeyGenerator keyGenerator(){
-        return new KeyGenerator(){
-            @Override
-            public Object generate(Object o, Method method, Object... objects) {
-                StringBuffer sb = new StringBuffer();
-                sb.append(o.getClass().getName());
-                sb.append(method.getName());
-                for(Object obj:objects){
-                    sb.append(obj.toString());
-                }
-                return sb.toString();
+        return (o, method, objects) -> {
+            StringBuffer sb = new StringBuffer();
+            sb.append(o.getClass().getName());
+            sb.append(method.getName());
+            for(Object obj:objects){
+                sb.append(obj.toString());
             }
+            return sb.toString();
         };
     }
 

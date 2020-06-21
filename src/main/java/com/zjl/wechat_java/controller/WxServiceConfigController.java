@@ -4,6 +4,8 @@ import com.zjl.wechat_java.config.WxOfficialsAccountConfiguration;
 import com.zjl.wechat_java.error.WeChatOaErrorEnum;
 import com.zjl.wechat_java.exception.WeChatOaException;
 import com.zjl.wechat_java.util.SHA1;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @datetime: 2019/6/1 20:53
  */
 @Slf4j
+@Api(value = "微信服务器配置",tags = {"微信服务器配置模块"})
 @RequestMapping("/wx_oa")
 @RestController
 public class WxServiceConfigController {
@@ -34,7 +37,8 @@ public class WxServiceConfigController {
      * @author zhou
      * @date 2019/6/1
      */
-    @GetMapping("/tokenVerification")
+    @ApiOperation(value = "接受微信的验证票据")
+    @GetMapping(value = "/tokenVerification")
     public void tokenVerification(HttpServletRequest request,
                                   HttpServletResponse response) {
         //微信加密签名
@@ -53,6 +57,7 @@ public class WxServiceConfigController {
             if (sha1Result.equals(signature)) {
                 response.getWriter().write(echostr);
             }else{
+                log.error("签名验证失败");
                 throw new WeChatOaException(WeChatOaErrorEnum.NOT_FROM_WECHAT);
             }
         } catch (Exception e) {

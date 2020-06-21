@@ -12,13 +12,14 @@ HELP.md
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 .mvn
 mvnw
 mvnw.cmd
 *.iws
 *.iml
 *.ipr
+wechat_java.iml
 
 ### NetBeans ###
 /nbproject/private/
